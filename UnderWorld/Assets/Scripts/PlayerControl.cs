@@ -13,7 +13,8 @@ public class PlayerControl : MonoBehaviour {
     GameObject fireballClone;
     public GameObject healthBar;
     bool blockCD = true;
-    float timeStamp = Time.time;
+    double timeStampBlock = Time.time;
+    double timeStampSwing = Time.time;
     //float
 
     void Start () {
@@ -103,11 +104,14 @@ public class PlayerControl : MonoBehaviour {
         //Sword swing
         if (Input.GetMouseButtonDown(0) && blockCD)
         {
+            
             float playerX = player.transform.position.x; //where the player is
             float playerY = player.transform.position.y;
 
             float xDiff = mousePosition.x - playerX; 
             float yDiff = mousePosition.y - playerY;
+
+            timeStampSwing = Time.time + 0.55;
 
             if (Mathf.Abs(yDiff) > Mathf.Abs(xDiff))
             {
@@ -125,9 +129,9 @@ public class PlayerControl : MonoBehaviour {
             }
         }
         //blocking
-        if (Input.GetKeyDown(KeyCode.Space) && blockCD)
+        if (Input.GetKeyDown(KeyCode.Space) && blockCD && (timeStampSwing <= Time.time))
         {
-            timeStamp = Time.time + 2;
+            timeStampBlock = Time.time + 2;
             blockCD = false;
             float playerX = player.transform.position.x; //where the player is
             float playerY = player.transform.position.y;
@@ -151,7 +155,7 @@ public class PlayerControl : MonoBehaviour {
                     blockLeft.SetActive(true);
             }
         }
-        if(blockCD == false && (timeStamp <= Time.time))
+        if(blockCD == false && (timeStampBlock <= Time.time))
             {
             blockUp.SetActive(false);
             blockDown.SetActive(false);
